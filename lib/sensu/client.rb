@@ -51,8 +51,10 @@ module Sensu
     end
 
     def publish_result(check)
+      client = check[:custom] && check[:custom][:override_client] ?
+                 check[:custom][:override_client] : @settings[:client][:name]
       payload = {
-        :client => @settings[:client][:name],
+        :client => client,
         :check => check
       }
       @logger.info('publishing check result', {
